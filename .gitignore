@@ -1,0 +1,13 @@
+# Never commit these
+*.env
+.env.local
+secrets.js
+config.local.js
+
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
