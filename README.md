@@ -24,7 +24,10 @@
 ## Architecture
 
 ```
-ai-page-summarizer/
+frontend_stage_4a/
+├── config.js           ← Real key — NEVER committed
+├── config.example.js   ← Empty key — committed to GitHub
+├── .gitignore          ← Includes config.js
 ├── manifest.json          # Manifest V3 config
 ├── popup.html             # Extension popup shell
 ├── popup.css              # Popup styles (dark editorial theme)
@@ -94,7 +97,7 @@ Content is truncated to ~12,000 characters (~3,000 tokens) before being sent, co
 | API key sent as Authorization Bearer header | Standard auth pattern; isolated to background service worker, never exposed to page context |
 
 ### Why Not a Proxy Server?
-This is a personal/local extension. Using a proxy would require hosting a server, managing auth, and adding latency. The user supplies their own Groq API key, which is the standard pattern for developer-facing extensions. A production/published extension should use a proxy to avoid exposing the key in requests.
+This is a personal/local extension. Using a proxy would require hosting a server, managing auth, and adding latency. A Groq API key has already been provided, which is the standard pattern for developer-facing extensions. A production/published extension should use a proxy to avoid exposing the key in requests.
 
 ---
 
@@ -102,7 +105,7 @@ This is a personal/local extension. Using a proxy would require hosting a server
 
 | Choice | Trade-off |
 |---|---|
-| User-supplied API key | Simple setup, but requires user to have a Groq account (free) |
+| Pre-configured API key | Works out of the box, but key must be kept out of version control via .gitignore |
 | Regex-based response parsing | More robust than JSON parsing for LLM output, but brittle if model deviates from format |
 | 12K char content limit | Prevents long documents from being fully summarized |
 | 30-min cache TTL | Balances freshness vs. API cost; can be adjusted in `background.js` |
@@ -114,7 +117,7 @@ This is a personal/local extension. Using a proxy would require hosting a server
 
 ### Prerequisites
 - Google Chrome (or any Chromium-based browser: Edge, Brave, Arc)
-- A [Groq API key](https://console.groq.com/keys) (free, no credit card required)
+- No API key needed — works immediately after installation
 
 ### Installation
 
@@ -139,23 +142,14 @@ This is a personal/local extension. Using a proxy would require hosting a server
    - Click the puzzle-piece icon in the toolbar
    - Click the pin icon next to "Summari"
 
-6. **Add your API Key**
-   - Click the Summari icon in your toolbar
-   - Click the ⚙️ settings icon (top right)
-   - Paste your Groq API key (from console.groq.com/keys)
-   - Click **Save Settings**
-
-7. **Summarize a page!**
+6. **You're ready!**
    - Navigate to any article or blog post
-   - Click the Summari icon
+   - Click the Sumree icon
    - Click **Summarize Page**
 
-### Getting an API Key
+### No API Key Needed
 
-1. Visit [console.groq.com/keys](https://console.groq.com/keys)
-2. Sign up for a free account (no credit card needed)
-3. Click **"Create API Key"**
-4. Copy the key (starts with `gsk_...`)
+Sumree works out of the box. No setup required from the user — the AI connection is pre-configured.
 
 ---
 
@@ -208,6 +202,6 @@ MIT — free to use, modify, and distribute.
 
 ## Security Note
 
-No API keys are stored in this repository. The Groq API key is entered by the
-user at runtime and stored exclusively in `chrome.storage.local` on their device.
-It is never written to any project file, never hardcoded, and never synced to the cloud.
+The Groq API key is stored in `config.js` which is listed in `.gitignore` and 
+is never committed to this repository. A `config.example.js` file is included 
+showing the expected structure.API calls are made exclusively from the background service worker, the key is never accessible to page scripts or the popup.

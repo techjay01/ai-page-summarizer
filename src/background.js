@@ -1,3 +1,5 @@
+importScripts('../config.js');
+
 // background.js — Service Worker
 // Handles all AI API communication. API key never touches the content script.
 
@@ -28,11 +30,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 async function handleSummarizeRequest({ content, url, title, settings }, sendResponse) {
   try {
     // 1. Load API key from storage
-    const stored = await chrome.storage.local.get(["apiKey", "summaryCache"]);
-    const apiKey = stored.apiKey;
+    const stored = await chrome.storage.local.get("summaryCache");
+    const apiKey = SUMMARI_CONFIG.apiKey;
 
     if (!apiKey || apiKey.trim() === "") {
-      sendResponse({ error: "NO_API_KEY", message: "Please add your Groq API key in Settings." });
+      sendResponse({ error: "NO_API_KEY", message: "API key not configured." });
       return;
     }
 

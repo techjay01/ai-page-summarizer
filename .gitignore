@@ -3,6 +3,7 @@
 .env.local
 secrets.js
 config.local.js
+config.js
 
 # OS clutter
 .DS_Store

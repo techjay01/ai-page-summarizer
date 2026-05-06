@@ -56,28 +56,16 @@ const els = {
   btnRefresh: $("btn-refresh"),
   // Settings
   btnBack: $("btn-back"),
-  inputApiKey: $("input-api-key"),
-  btnToggleKey: $("btn-toggle-key"),
-  btnSaveSettings: $("btn-save-settings"),
   saveFeedback: $("save-feedback"),
   cacheCount: $("cache-count"),
   btnClearCache: $("btn-clear-cache"),
-  noKeyBanner: $("no-key-banner"),
-  // Onboarding
-  viewOnboarding: $("view-onboarding"),
-  inputOnboardingKey: $("input-onboarding-key"),
-  btnToggleOnboardingKey: $("btn-toggle-onboarding-key"),
-  btnOnboardingSave: $("btn-onboarding-save"),
-  onboardingError: $("onboarding-error"),
-  btnSkipOnboarding: $("btn-skip-onboarding")
 };
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
+  await restoreTheme();
   await loadCurrentTab();
   await restoreStyle();
-  await restoreTheme();
-  await checkApiKey();
   bindEvents();
 });
 
@@ -141,39 +129,8 @@ function applyTheme(theme) {
   els.iconMoon.style.display = theme === "light" ? "" : "none";
 }
 
-async function checkApiKey() {
-  const { apiKey } = await chrome.storage.local.get("apiKey");
-  if (!apiKey) {
-    showView("onboarding");
-  }
-}
-
 // ─── Event Bindings ───────────────────────────────────────────────────────────
 function bindEvents() {
-  // Onboarding key visibility toggle
-  els.btnToggleOnboardingKey.addEventListener("click", () => {
-    const isPassword = els.inputOnboardingKey.type === "password";
-    els.inputOnboardingKey.type = isPassword ? "text" : "password";
-  });
-
-  // Onboarding save
-  els.btnOnboardingSave.addEventListener("click", async () => {
-    const rawKey = els.inputOnboardingKey.value.trim();
-    if (!rawKey.startsWith("gsk_")) {
-      els.onboardingError.style.display = "flex";
-      els.inputOnboardingKey.style.borderColor = "var(--red)";
-      setTimeout(() => {
-        els.onboardingError.style.display = "none";
-        els.inputOnboardingKey.style.borderColor = "";
-      }, 3000);
-      return;
-    }
-    await chrome.storage.local.set({ apiKey: rawKey });
-    showView("main");
-  });
-
-  // Skip to settings
-  els.btnSkipOnboarding.addEventListener("click", () => showView("settings"));
   
   // Navigation
   els.btnTheme.addEventListener("click", async () => {
@@ -220,30 +177,6 @@ function bindEvents() {
     handleSummarize();
   });
 
-  // Settings: toggle key visibility
-  els.btnToggleKey.addEventListener("click", () => {
-    const isPassword = els.inputApiKey.type === "password";
-    els.inputApiKey.type = isPassword ? "text" : "password";
-    els.btnToggleKey.innerHTML = isPassword
-      ? `<svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-           <path d="M2 7.5s1-4.5 5.5-4.5S13 7.5 13 7.5s-1 4.5-5.5 4.5S2 7.5 2 7.5z" stroke="currentColor" stroke-width="1.3"/>
-           <path d="M2 2l11 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-         </svg>`
-      : `<svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-           <path d="M1 7.5C1 7.5 3 3 7.5 3S14 7.5 14 7.5 12 12 7.5 12 1 7.5 1 7.5z" stroke="currentColor" stroke-width="1.3"/>
-           <circle cx="7.5" cy="7.5" r="2" stroke="currentColor" stroke-width="1.3"/>
-         </svg>`;
-  });
-
-  // Settings: save
-  els.btnSaveSettings.addEventListener("click", handleSaveSettings);
-
-  // Settings: clear cache
-  els.btnClearCache.addEventListener("click", async () => {
-    await chrome.runtime.sendMessage({ type: "CLEAR_CACHE" });
-    els.cacheCount.textContent = "0 pages cached";
-  });
-
   // Keyboard shortcut: Enter on summarize button
   els.btnSummarize.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") handleSummarize();
@@ -255,32 +188,18 @@ async function showView(view) {
   state.view = view;
   els.viewMain.style.display = view === "main" ? "" : "none";
   els.viewSettings.style.display = view === "settings" ? "" : "none";
-  els.viewOnboarding.style.display = view === "onboarding" ? "" : "none";
 
   if (view === "settings") {
-    const { apiKey } = await chrome.storage.local.get("apiKey");
-    els.inputApiKey.value = apiKey || "";
-    els.noKeyBanner.style.display = apiKey ? "none" : "flex";
-
-    // Cache stats
+    els.saveFeedback.style.display = "none";
     const resp = await chrome.runtime.sendMessage({ type: "GET_CACHE_STATS" });
     const count = resp?.count || 0;
     els.cacheCount.textContent = `${count} page${count !== 1 ? "s" : ""} cached`;
-
-    els.saveFeedback.style.display = "none";
   }
 }
 
 // ─── Summarize Flow ────────────────────────────────────────────────────────────
 async function handleSummarize() {
   if (state.phase === "loading") return;
-
-  const { apiKey } = await chrome.storage.local.get("apiKey");
-  if (!apiKey) {
-    showView("settings");
-    els.noKeyBanner.style.display = "flex";
-    return;
-  }
 
   setPhase("loading");
   animateLoadingBar();
@@ -512,18 +431,6 @@ const STOP_WORDS = new Set([
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 async function handleSaveSettings() {
-  const rawKey = els.inputApiKey.value.trim();
-
-  // Basic validation
-  if (rawKey && !rawKey.startsWith("gsk_")) {
-    els.inputApiKey.style.borderColor = "var(--red)";
-    setTimeout(() => (els.inputApiKey.style.borderColor = ""), 2000);
-    return;
-  }
-
-  await chrome.storage.local.set({ apiKey: rawKey });
-
-  els.noKeyBanner.style.display = rawKey ? "none" : "flex";
   els.saveFeedback.style.display = "flex";
   setTimeout(() => (els.saveFeedback.style.display = "none"), 3000);
 }

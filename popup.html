@@ -205,127 +205,18 @@
 
     <div class="settings-body">
       <div class="settings-group">
-        <label class="settings-label" for="input-api-key">
-          Groq API Key
-          <a class="settings-link" href="https://console.groq.com/keys" target="_blank" rel="noopener">Get key ↗</a>
-        </label>
-        <div class="api-key-wrap">
-          <input
-            class="settings-input"
-            type="password"
-            id="input-api-key"
-            placeholder="gsk_..."
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <button class="toggle-visibility" id="btn-toggle-key" aria-label="Toggle key visibility">
-            <svg id="eye-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <path d="M1 7.5C1 7.5 3 3 7.5 3S14 7.5 14 7.5 12 12 7.5 12 1 7.5 1 7.5z" stroke="currentColor" stroke-width="1.3"/>
-              <circle cx="7.5" cy="7.5" r="2" stroke="currentColor" stroke-width="1.3"/>
-            </svg>
-          </button>
-        </div>
-        <p class="settings-hint">Stored locally. Never sent anywhere except Groq's API.</p>
-      </div>
-
-      <div class="settings-group">
-        <label class="settings-label">Cache</label>
+        <label class="settings-label">AI Model</label>
         <div class="cache-info">
-          <span class="cache-count" id="cache-count">0 pages cached</span>
-          <button class="btn-danger-ghost" id="btn-clear-cache">Clear all</button>
-        </div>
-        <p class="settings-hint">Summaries are cached for 30 minutes per URL.</p>
-      </div>
-
-      <button class="btn-save" id="btn-save-settings">Save Settings</button>
-
-      <div class="save-feedback" id="save-feedback" style="display:none">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M2 6.5L5 9.5L11 3.5" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Saved successfully
-      </div>
-    </div>
-
-    <!-- No API Key Banner -->
-    <div class="no-key-banner" id="no-key-banner" style="display:none">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M7.5 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" stroke="#F59E0B" stroke-width="1.4"/>
-        <path d="M10.5 10.5l5 5" stroke="#F59E0B" stroke-width="1.4" stroke-linecap="round"/>
-        <path d="M7.5 7.5v.5M7.5 9.5v.01" stroke="#F59E0B" stroke-width="1.4" stroke-linecap="round"/>
-      </svg>
-      <span>Add an API key to start summarizing pages.</span>
-    </div>
-  </div>
-
-  <!-- ── Onboarding View ── -->
-  <div class="view" id="view-onboarding" style="display:none">
-    <div class="onboarding-wrap">
-
-      <p class="onboarding-subtitle">Summarize any webpage instantly with AI.<br/>Takes 2 minutes to set up — completely free.</p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">Create a free Groq account</div>
-            <div class="step-desc">No credit card needed. Groq gives you free AI tokens every day.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">Get your API key</div>
-            <div class="step-desc">Click the button below — it opens Groq's key page directly.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">Paste it below and you're done</div>
-            <div class="step-desc">Your key stays on your device only. We never see it.</div>
-          </div>
-        </div>
-      </div>
-
-      <a class="btn-groq-link" href="https://console.groq.com/keys" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M7 1h6v6M13 1L6 8M4 3H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Open Groq — Get Free API Key
-      </a>
-
-      <div class="onboarding-input-wrap">
-        <div class="api-key-wrap">
-          <input
-            class="settings-input"
-            type="password"
-            id="input-onboarding-key"
-            placeholder="Paste your key here (gsk_...)"
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <button class="toggle-visibility" id="btn-toggle-onboarding-key" aria-label="Toggle key visibility">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <path d="M1 7.5C1 7.5 3 3 7.5 3S14 7.5 14 7.5 12 12 7.5 12 1 7.5 1 7.5z" stroke="currentColor" stroke-width="1.3"/>
-              <circle cx="7.5" cy="7.5" r="2" stroke="currentColor" stroke-width="1.3"/>
+          <span class="cache-count">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="display:inline;margin-right:4px">
+              <circle cx="5" cy="5" r="4" fill="#10B981"/>
+              <path d="M2.5 5l2 2 3-3" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+            Groq — Llama 3.3 70B — Connected
+          </span>
         </div>
-        <button class="btn-primary btn-onboarding-save" id="btn-onboarding-save">
-          Start Summarizing
-        </button>
-        <div class="onboarding-error" id="onboarding-error" style="display:none">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <circle cx="6" cy="6" r="5" stroke="#EF4444" stroke-width="1.2"/>
-            <path d="M6 4v3M6 8.5v.1" stroke="#EF4444" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          That doesn't look like a valid Groq key. It should start with gsk_
-        </div>
+        <p class="settings-hint">Fast, free AI. No API key needed from you.</p>
       </div>
-
-      <p class="onboarding-skip">Already have a key? <button class="link-btn" id="btn-skip-onboarding">Go to Settings</button></p>
-
     </div>
   </div>
 
