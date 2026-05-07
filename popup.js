@@ -56,6 +56,7 @@ const els = {
   btnRefresh: $("btn-refresh"),
   // Settings
   btnBack: $("btn-back"),
+  btnSaveSettings: $("btn-save-settings"),
   saveFeedback: $("save-feedback"),
   cacheCount: $("cache-count"),
   btnClearCache: $("btn-clear-cache"),
@@ -180,6 +181,12 @@ function bindEvents() {
   // Keyboard shortcut: Enter on summarize button
   els.btnSummarize.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") handleSummarize();
+  });
+
+  els.btnSaveSettings.addEventListener("click", handleSaveSettings);
+  els.btnClearCache.addEventListener("click", async () => {
+    await chrome.runtime.sendMessage({ type: "CLEAR_CACHE" });
+    els.cacheCount.textContent = "0 pages cached";
   });
 }
 

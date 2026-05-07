@@ -30,7 +30,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 async function handleSummarizeRequest({ content, url, title, settings }, sendResponse) {
   try {
     // 1. Load API key from storage
-    const stored = await chrome.storage.local.get("summaryCache");
     const apiKey = SUMMARI_CONFIG.apiKey;
 
     if (!apiKey || apiKey.trim() === "") {
@@ -38,7 +37,8 @@ async function handleSummarizeRequest({ content, url, title, settings }, sendRes
       return;
     }
 
-    // 2. Check cache
+    // 2. Check cache — prevent duplicate API calls
+    const stored = await chrome.storage.local.get("summaryCache");
     const cache = stored.summaryCache || {};
     const cacheKey = normalizeUrl(url);
     const cached = cache[cacheKey];

@@ -44,7 +44,7 @@ body {
 
 /* ── Scrollable Areas ──────────────────────────────────────────────────────── */
 .view {
-  overflow-y: auto;
+  overflow-y: visible;
   max-height: 580px;
   scrollbar-width: thin;
   scrollbar-color: var(--bg-3) transparent;

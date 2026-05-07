@@ -204,10 +204,12 @@
     </div>
 
     <div class="settings-body">
+
+      <!-- AI Model Status -->
       <div class="settings-group">
         <label class="settings-label">AI Model</label>
         <div class="cache-info">
-          <span class="cache-count">
+          <span>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="display:inline;margin-right:4px">
               <circle cx="5" cy="5" r="4" fill="#10B981"/>
               <path d="M2.5 5l2 2 3-3" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -217,6 +219,28 @@
         </div>
         <p class="settings-hint">Fast, free AI. No API key needed from you.</p>
       </div>
+
+      <!-- Cache -->
+      <div class="settings-group">
+        <label class="settings-label">Cache</label>
+        <div class="cache-info">
+          <span class="cache-count" id="cache-count">0 pages cached</span>
+          <button class="btn-danger-ghost" id="btn-clear-cache">Clear all</button>
+        </div>
+        <p class="settings-hint">Summaries are cached for 30 minutes per URL.</p>
+      </div>
+
+      <!-- Save button -->
+      <button class="btn-save" id="btn-save-settings">Save Settings</button>
+
+      <!-- Save feedback -->
+      <div class="save-feedback" id="save-feedback" style="display:none">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M2 6.5L5 9.5L11 3.5" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Settings saved
+      </div>
+
     </div>
   </div>
 
